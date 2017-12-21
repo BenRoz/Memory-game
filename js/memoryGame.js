@@ -37,7 +37,6 @@ shuffleArray(pic);
 var allCards= document.getElementsByClassName('card');
 for (var x=0; x<allCards.length; x++){
     allCards[x].id= "card"+ x;
-    console.log("card"+ x);
     allCards[x].addEventListener("click", flipCards);
     allCards[x].style.backgroundImage="url('./images/back6.jpg')";
 }
@@ -45,14 +44,16 @@ for (var x=0; x<allCards.length; x++){
 var counter=0;
 var firstFlip={};
 var locat=0;
- var secondFlip={};
+var secondFlip={};
+var correctAnswer=0;
+var mistake=0;
 function flipCards(){
+
     counter+=1
     var cardId = this.id;
     var take = cardId.split("card");
     locat=take[1];
     this.style.backgroundImage= "url('./images/"+pic[locat]+"')" ;
-    console.log(pic[locat]);
 
     if (counter==1){
         firstFlip.url=this.style.backgroundImage;
@@ -63,17 +64,30 @@ function flipCards(){
         secondFlip.url= this.style.backgroundImage;
         secondFlip.locat = locat;
         secondFlip.id = cardId;
+
         setTimeout(function(){
-            console.log(firstFlip);
-            console.log(secondFlip);
             if (secondFlip.url!=firstFlip.url){
                 console.log("printingonly if no match");
-                document.getElementById("firstFlip.id").style.backgroundImage = "url('./images/"+pic[firstFlip]+"')" ;
+                document.getElementById(firstFlip.id).style.backgroundImage = "url('./images/back6.jpg')";
+                document.getElementById(secondFlip.id).style.backgroundImage = "url('./images/back6.jpg')";
+                mistake=mistake+2;
             }
+            else if (secondFlip.url==firstFlip.url){
+                correctAnswer=correctAnswer+2;
+
+            }
+
             counter=0;
+            if (correctAnswer==2){
+                console.log("correct");
+                alert("you win you had "+mistake+" mistakes ");
+            }
 
-            console.log(counter);
-
-        }, 1500);
+        }, 900);
     }
-}
+
+
+
+        }
+
+
