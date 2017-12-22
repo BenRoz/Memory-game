@@ -72,7 +72,7 @@ var locat=0;
 var secondFlip={};
 var correctAnswer=0;
 var mistake=0;
-
+var sucessCardDetails=[]
 function flipCards(){
     counter+=1
     var cardId = this.id;
@@ -98,10 +98,12 @@ function flipCards(){
                 mistake=mistake+2;
             }
             else if (secondFlip.url==firstFlip.url){
+                 sucessCardDetails.push(firstFlip.locat);
+                 sucessCardDetails.push(secondFlip.locat);
                 correctAnswer=correctAnswer+2;
             }
 
-            if (correctAnswer==12){
+            if (correctAnswer==pic.length){
                 console.log("correct");
                 alert("you win you had "+mistake+" mistakes ");
             }
@@ -129,3 +131,27 @@ function changingGameLevel(){
     assigningIdAndImageAndEvent();
     newGame();
 }
+
+document.getElementById("save").addEventListener("click", saveGame);
+var saveData={};
+function saveGame(){
+
+    saveData.picArray=pic;
+    saveData.correct= correctAnswer;
+    saveData.mistake= mistake;
+    saveData.correctCardsDetails= sucessCardDetails;
+    localStorage.setItem('Game', JSON.stringify(saveData));
+    alert("Game Saved");
+};
+
+document.getElementById("load").addEventListener("click", loadGame);
+function loadGame(){
+    pic=saveData.picArray;
+    correctAnswer = saveData.correct;
+    mistake =saveData.mistake;
+    for (var i=0;i<saveData.correctCardsDetails.length; i++){
+        document.getElementById("card"+saveData.correctCardsDetails[i]+"").style.backgroundImage= "url('./images/"+pic[saveData.correctCardsDetails[i]]+"')" ;
+    }
+
+
+};
