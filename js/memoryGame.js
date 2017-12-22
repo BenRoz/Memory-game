@@ -1,6 +1,5 @@
 var oneRow = document.getElementsByClassName("container")[0].innerHTML;
 var container = document.getElementsByClassName("container")[0];
-
 var difficulty = {
     easy : 2,
     medium : 3,
@@ -9,28 +8,26 @@ var difficulty = {
 var difficultLevel=2;
 var pic= ['1.jpg','1.jpg', '2.jpg', '2.jpg' , '3.jpg', '3.jpg','4.jpg', '4.jpg', '5.jpg', '5.jpg','0.jpg', '0.jpg'];
 
-
-var addRow = function(num){
+var createRow = function(num){
     container.innerHTML = oneRow;
     for(var i = 0; i < num; i++){
        container.innerHTML = container.innerHTML + oneRow;
     }
 }
-addRow(difficulty.easy);
-
-
-function difficultChangeParameterss(){
+createRow(difficulty.easy);
 var select= document.getElementById("select").value;
+console.log(select)
+function difficultChangeParameters(select){
     if (select=="3"){
-        addRow(difficulty.medium);
+        createRow(difficulty.medium);
         difficultLevel=3;
     }
     else if (select=="4"){
-        addRow(difficulty.hard);
+        createRow(difficulty.hard);
          difficultLevel=4;
     }
      else if (select=="2"){
-        addRow(difficulty.easy);
+        createRow(difficulty.easy);
         difficultLevel=2;
     }
 
@@ -126,16 +123,18 @@ function newGame(){
 }
 document.getElementById("select").addEventListener("click", changingGameLevel);
 function changingGameLevel(){
-    difficultChangeParameterss();
+    select= document.getElementById("select").value;
+    difficultChangeParameters(select);
     shuffleArray(pic);
     assigningIdAndImageAndEvent();
     newGame();
 }
 
 document.getElementById("save").addEventListener("click", saveGame);
-var saveData={};
-function saveGame(){
 
+function saveGame(){
+    var saveData={};
+    saveData.boardSize=select;
     saveData.picArray=pic;
     saveData.correct= correctAnswer;
     saveData.mistake= mistake;
@@ -146,12 +145,15 @@ function saveGame(){
 
 document.getElementById("load").addEventListener("click", loadGame);
 function loadGame(){
-    pic=saveData.picArray;
-    correctAnswer = saveData.correct;
-    mistake =saveData.mistake;
-    for (var i=0;i<saveData.correctCardsDetails.length; i++){
-        document.getElementById("card"+saveData.correctCardsDetails[i]+"").style.backgroundImage= "url('./images/"+pic[saveData.correctCardsDetails[i]]+"')" ;
+    var loadedGame = localStorage.getItem('Game');
+    var loadData = JSON.parse(loadedGame);
+    difficultChangeParameters(loadData.boardSize);
+    newGame();
+    pic= loadData.picArray;
+    correctAnswer = loadData.correct;
+    mistake = loadData.mistake;
+    for (var i=0;i<loadData.correctCardsDetails.length; i++){
+        document.getElementById("card"+loadData.correctCardsDetails[i]+"").style.backgroundImage= "url('./images/"+pic[loadData.correctCardsDetails[i]]+"')" ;
     }
-
 
 };
