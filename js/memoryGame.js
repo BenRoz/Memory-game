@@ -15,8 +15,8 @@ var createRow = function(num){
     }
 }
 createRow(difficulty.easy);
+
 var select= document.getElementById("select").value;
-console.log(select)
 function difficultChangeParameters(select){
     if (select=="3"){
         createRow(difficulty.medium);
@@ -75,7 +75,7 @@ function flipCards(){
     var cardId = this.id;
     var take = cardId.split("card");
     locat=take[1];
-
+    
     if (counter==1){
         this.style.backgroundImage= "url('./images/"+pic[locat]+"')" ;
         firstFlip.url=this.style.backgroundImage;
@@ -149,6 +149,7 @@ function loadGame(){
     var loadData = JSON.parse(loadedGame);
     difficultChangeParameters(loadData.boardSize);
     newGame();
+    assigningIdAndImageAndEvent();
     pic= loadData.picArray;
     correctAnswer = loadData.correct;
     mistake = loadData.mistake;
