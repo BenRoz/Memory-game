@@ -51,14 +51,25 @@ function shuffleArray(array) {
     }
 }
 shuffleArray(pic);
-
+var boolea=[];
 var allCards;
+var backSideImageColoful ="url('./images/images.jpg')"
+var backSideImageGold = "url('./images/image.jpg')"
+
+function firstBackImage(){
+ allCards= document.getElementsByClassName('card');
+  for (var x=0; x<allCards.length; x++){
+        allCards[x].style.backgroundImage= backSideImageColoful;
+         boolea[x]="Coloful";
+  }
+}
+firstBackImage();
+
 function assigningIdAndImageAndEvent(){
-    allCards= document.getElementsByClassName('card');
     for (var x=0; x<allCards.length; x++){
         allCards[x].id= "card"+ x;
         allCards[x].addEventListener("click", flipCards);
-        allCards[x].style.backgroundImage="url('./images/back6.jpg')";
+
     }
 }
 assigningIdAndImageAndEvent();
@@ -69,20 +80,22 @@ var locat=0;
 var secondFlip={};
 var correctAnswer=0;
 var mistake=0;
-var sucessCardDetails=[]
+var sucessCardDetails=[] ;
 function flipCards(){
     counter+=1
     var cardId = this.id;
     var take = cardId.split("card");
     locat=take[1];
-    
+
     if (counter==1){
+        firstFlip.backImage = this.style.backgroundImage;
         this.style.backgroundImage= "url('./images/"+pic[locat]+"')" ;
         firstFlip.url=this.style.backgroundImage;
         firstFlip.locat = locat;
         firstFlip.id = cardId;
     }
     else if (counter==2){
+        secondFlip.backImage = this.style.backgroundImage;
         this.style.backgroundImage= "url('./images/"+pic[locat]+"')" ;
         secondFlip.url= this.style.backgroundImage;
         secondFlip.locat = locat;
@@ -90,13 +103,15 @@ function flipCards(){
 
         setTimeout(function(){
             if (secondFlip.url!=firstFlip.url){
-                document.getElementById(firstFlip.id).style.backgroundImage = "url('./images/back6.jpg')";
-                document.getElementById(secondFlip.id).style.backgroundImage = "url('./images/back6.jpg')";
+                document.getElementById(firstFlip.id).style.backgroundImage =  firstFlip.backImage ;
+                document.getElementById(secondFlip.id).style.backgroundImage =  secondFlip.backImage ;
                 mistake=mistake+2;
             }
             else if (secondFlip.url==firstFlip.url){
-                 sucessCardDetails.push(firstFlip.locat);
-                 sucessCardDetails.push(secondFlip.locat);
+                sucessCardDetails.push(firstFlip.locat);
+                sucessCardDetails.push(secondFlip.locat);
+                boolea[firstFlip.locat] = "frontSideImg";
+                boolea[secondFlip.locat] = "frontSideImg";
                 correctAnswer=correctAnswer+2;
             }
 
@@ -109,19 +124,30 @@ function flipCards(){
     }
 }
 document.getElementById("newGame").addEventListener("click",newGame)
+
 function newGame(){
+    shuffleArray(pic);
+    for (var x=0; x<allCards.length; x++){
+        if (boolea[0]=="gold" || boolea[1]=="gold" || boolea[2]=="gold"){
+            allCards[x].style.backgroundImage=backSideImageGold ;
+            boolea[x] = "gold" ;
+        }
+        else {
+         allCards[x].style.backgroundImage = backSideImageColoful ;
+         boolea[x] = "Coloful" ;
+        }
+    }
     counter=0;
     firstFlip={};
     locat=0;
     secondFlip={};
     correctAnswer=0;
     mistake=0;
-    for (var x=0; x<allCards.length; x++){
-         allCards[x].style.backgroundImage="url('./images/back6.jpg')";
+    sucessCardDetails=[] ;
 
-    }
 }
 document.getElementById("select").addEventListener("click", changingGameLevel);
+
 function changingGameLevel(){
     select= document.getElementById("select").value;
     difficultChangeParameters(select);
@@ -131,9 +157,9 @@ function changingGameLevel(){
 }
 
 document.getElementById("save").addEventListener("click", saveGame);
-
+var saveData={};
 function saveGame(){
-    var saveData={};
+    saveData={};
     saveData.boardSize=select;
     saveData.picArray=pic;
     saveData.correct= correctAnswer;
@@ -153,8 +179,23 @@ function loadGame(){
     pic= loadData.picArray;
     correctAnswer = loadData.correct;
     mistake = loadData.mistake;
+    document.getElementById('select').value = loadData.boardSize;
     for (var i=0;i<loadData.correctCardsDetails.length; i++){
         document.getElementById("card"+loadData.correctCardsDetails[i]+"").style.backgroundImage= "url('./images/"+pic[loadData.correctCardsDetails[i]]+"')" ;
+        boolea[loadData.correctCardsDetails[i]] = "frontSideImg";
     }
+};
 
+document.getElementById("backChange").addEventListener("click", changeImage);
+function changeImage(){
+    for (var x=0; x<allCards.length; x++){
+        if (  boolea[x]== "Coloful"){
+             allCards[x].style.backgroundImage = backSideImageGold;
+             boolea[x]="gold";
+        }
+        else if (boolea[x]=="gold"){
+              allCards[x].style.backgroundImage = backSideImageColoful;
+               boolea[x]="Coloful"
+        }
+    }
 };

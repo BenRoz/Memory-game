@@ -31,7 +31,8 @@ button:hover {
 
 
 .container{
-     border: 1px solid ;
+     border: 2px solid ;
+     border-radius: 7px;
     background-image: url('../images/bg.jpg');
       background-size: cover;
      background-repeat: no-repeat;
