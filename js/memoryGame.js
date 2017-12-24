@@ -117,7 +117,8 @@ function flipCards(){
 
             if (correctAnswer==pic.length){
                 console.log("correct");
-                alert("you win you had "+mistake+" mistakes ");
+                $('#myModal').modal('show');
+                document.getElementById('Modal-text').innerHTML= "you win you had "+mistake+" mistakes";
             }
         counter=0;
         }, 900);
